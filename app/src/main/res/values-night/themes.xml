@@ -1,0 +1,9 @@
+<resources>
+    <style name="Theme.Mori" parent="android:Theme.Material.NoActionBar">
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <color name="accent">#8FC9AE</color>
+</resources>

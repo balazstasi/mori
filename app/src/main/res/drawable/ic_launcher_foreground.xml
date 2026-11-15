@@ -1,0 +1,25 @@
+<!-- Mori's mark: 1 over infinity, the notation for an infinitesimal. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:pathData="M48,31.5L54,27V45"
+        android:strokeColor="#F2EBDD"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="5" />
+    <path
+        android:pathData="M37,55H71"
+        android:strokeColor="#F2EBDD"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="5" />
+    <path
+        android:pathData="M54,73C57.5,67.5 60.5,65 63.5,65C67.6,65 71,68.6 71,73C71,77.4 67.6,81 63.5,81C60.5,81 57.5,78.5 54,73C50.5,67.5 47.5,65 44.5,65C40.4,65 37,68.6 37,73C37,77.4 40.4,81 44.5,81C47.5,81 50.5,78.5 54,73Z"
+        android:strokeColor="#F2EBDD"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="5" />
+</vector>

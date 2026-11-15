@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Mori</string>
+    <string name="service_description">Keeps Instagram to messages and YouTube Shorts to one at a time. Mori reads which Instagram or YouTube screen is open so it can close Instagram\'s home feed and Reels tab, grey out YouTube\'s Shorts button, and stop you from scrolling past a reel or short you opened. It does not save or send anything it sees, and it has no internet access.</string>
+
+    <string name="tagline">You\'re gonna die soon, don\'t waste it.</string>
+
+    <string name="setup_title">Setup</string>
+    <string name="setup_accessibility">Accessibility</string>
+    <string name="setup_accessibility_button">Turn on</string>
+    <string name="setup_restricted">Restricted settings</string>
+    <string name="setup_restricted_hint">Only if Accessibility is greyed out</string>
+    <string name="setup_restricted_button">App info</string>
+    <string name="step_done">Done</string>
+    <string name="step_missing">Not done</string>
+    <string name="step_unknown">Cannot be checked</string>
+
+    <string name="instagram">Instagram</string>
+    <string name="instagram_allowed">Open reels from chats</string>
+    <string name="instagram_blocked">No feed, no scrolling</string>
+    <string name="instagram_blocked_with_limit">No feed</string>
+    <string name="youtube">YouTube</string>
+    <string name="youtube_allowed">Open shorts from Home</string>
+    <string name="youtube_blocked">No Shorts tab, no scrolling</string>
+    <string name="youtube_blocked_with_limit">Shorts stop at the limit</string>
+    <string name="limit_title">Scroll limit</string>
+    <string name="limit_off">Off</string>
+    <string name="limit_per_day">%d a day</string>
+    <string name="limit_today">Today %1$d/%2$d</string>
+    <string name="not_installed">Not installed</string>
+
+    <string name="cover_home">The feed is off.</string>
+    <string name="cover_explore">Explore is off. Search still works.</string>
+    <string name="toast_one_reel">Just this reel. Scrolling is off.</string>
+    <string name="toast_one_short">Just this short. Scrolling is off.</string>
+    <string name="toast_reels_off">Reels are off.</string>
+    <string name="counter">%1$d/%2$d</string>
+    <string name="counter_done">%1$d/%2$d · Done for today</string>
+    <string name="toast_shorts_off">Shorts are off.</string>
+</resources>

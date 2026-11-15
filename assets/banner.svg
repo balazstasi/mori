@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400" role="img" aria-label="Mori. You're gonna die soon, don't waste it.">
+  <defs>
+    <radialGradient id="glow" cx="18%" cy="45%" r="70%">
+      <stop offset="0" stop-color="#2B5747"/>
+      <stop offset="1" stop-color="#1E4034"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="400" rx="28" fill="url(#glow)"/>
+  <g fill="none" stroke="#F2EBDD" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M54,73C57.5,67.5 60.5,65 63.5,65C67.6,65 71,68.6 71,73C71,77.4 67.6,81 63.5,81C60.5,81 57.5,78.5 54,73C50.5,67.5 47.5,65 44.5,65C40.4,65 37,68.6 37,73C37,77.4 40.4,81 44.5,81C47.5,81 50.5,78.5 54,73Z" stroke-width="5" opacity="0.07" transform="translate(536,-676) scale(12)"/>
+    <g stroke-width="5" transform="translate(27.2,27.2) scale(3.2)">
+      <path d="M48,31.5L54,27V45"/>
+      <path d="M37,55H71"/>
+      <path d="M54,73C57.5,67.5 60.5,65 63.5,65C67.6,65 71,68.6 71,73C71,77.4 67.6,81 63.5,81C60.5,81 57.5,78.5 54,73C50.5,67.5 47.5,65 44.5,65C40.4,65 37,68.6 37,73C37,77.4 40.4,81 44.5,81C47.5,81 50.5,78.5 54,73Z"/>
+    </g>
+  </g>
+  <g fill="#F2EBDD" font-family="Inter, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+    <text x="318" y="222" font-size="132" font-weight="600" letter-spacing="-3">Mori</text>
+    <text x="324" y="282" font-size="34" opacity="0.72">You're gonna die soon, don't waste it.</text>
+  </g>
+</svg>
