@@ -10,9 +10,9 @@ class GuardTest {
     private val guard = Guard()
 
     /** Shows [screen] for two looks in a row, which confirms it, and returns the second answer. */
-    private fun show(screen: Screen, now: Long): Action {
-        assertEquals(Action.LookAgain, guard.onScreen(screen, now))
-        return guard.onScreen(screen, now + 100)
+    private fun show(screen: Screen, now: Long, fromChat: Boolean = false): Action {
+        assertEquals(Action.LookAgain, guard.onScreen(screen, now, fromChat))
+        return guard.onScreen(screen, now + 100, fromChat)
     }
 
     @Test
@@ -196,6 +196,36 @@ class GuardTest {
         assertEquals(Action.CountReel, guard.onShortShown(9, 2_000))
         assertEquals(Action.None, guard.onShortShown(9, 2_100))
         assertEquals(Action.CloseReel, guard.onShortShown(11, 2_500))
+    }
+
+    @Test
+    fun homeStaysWhileItIsOpen() {
+        guard.homeOpen = true
+        assertEquals(Action.None, show(Screen.HOME, 0))
+        show(Screen.MESSAGES, 1_000)
+        assertEquals(Action.None, show(Screen.HOME, 2_000))
+    }
+
+    @Test
+    fun withHomeOpenOnlyReelsFromChatsPlay() {
+        guard.homeOpen = true
+        assertEquals(Action.CloseReel, show(Screen.REEL, 0))
+        show(Screen.OTHER, 1_000)
+        assertEquals(Action.None, show(Screen.REEL, 2_000, fromChat = true))
+    }
+
+    @Test
+    fun withHomeOpenReelsPlayWhileTheLimitHasSomeLeft() {
+        guard.homeOpen = true
+        guard.scrollsLeft = 5
+        assertEquals(Action.None, show(Screen.REEL, 0))
+    }
+
+    @Test
+    fun reelsFromChatsCloseWhenReelsAreOff() {
+        guard.homeOpen = true
+        guard.reelsAllowed = false
+        assertEquals(Action.CloseReel, show(Screen.REEL, 0, fromChat = true))
     }
 
     @Test

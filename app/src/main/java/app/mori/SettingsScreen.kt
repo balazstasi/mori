@@ -28,6 +28,9 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -120,15 +123,19 @@ fun SettingsScreen(
             SetupCard(serviceOn, onTurnOn, onAppInfo)
 
             var instagram by remember { mutableStateOf(prefs.instagram) }
+            var instagramHome by remember { mutableStateOf(prefs.instagramHome) }
             var instagramReels by remember { mutableStateOf(prefs.instagramReels) }
             var instagramLimit by remember { mutableIntStateOf(prefs.limit(Instagram.PACKAGE)) }
+            val withLimit = instagramReels && instagramLimit > 0
             AppCard(
                 pkg = Instagram.PACKAGE,
                 name = R.string.instagram,
-                blocked = if (instagramReels && instagramLimit > 0) {
-                    R.string.instagram_blocked_with_limit
-                } else {
-                    R.string.instagram_blocked
+                blocked = when {
+                    instagramHome == InstagramHome.OFF && withLimit -> R.string.instagram_blocked_with_limit
+                    instagramHome == InstagramHome.OFF -> R.string.instagram_blocked
+                    withLimit -> R.string.instagram_blocked_home_with_limit
+                    instagramReels -> R.string.instagram_blocked_home
+                    else -> R.string.instagram_blocked_home_no_reels
                 },
                 option = Feature(R.drawable.ic_chat, R.string.instagram_allowed),
                 checked = instagram,
@@ -147,6 +154,12 @@ fun SettingsScreen(
                     prefs.setLimit(Instagram.PACKAGE, it)
                 },
                 scrolledToday = remember(resumes) { prefs.scrolledToday(Instagram.PACKAGE) },
+                home = { enabled ->
+                    HomeControl(instagramHome, enabled) {
+                        instagramHome = it
+                        prefs.instagramHome = it
+                    }
+                },
             )
 
             var youtube by remember { mutableStateOf(prefs.youtube) }
@@ -255,6 +268,7 @@ private fun AppCard(
     limit: Int,
     onLimitChange: (Int) -> Unit,
     scrolledToday: Int,
+    home: (@Composable (enabled: Boolean) -> Unit)? = null,
 ) {
     val icon = rememberAppIcon(pkg, 48.dp)
     SectionCard {
@@ -300,6 +314,7 @@ private fun AppCard(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Column {
+                home?.invoke(checked)
                 OptionRow(option, optionChecked, enabled = checked, onOptionChange)
                 // A limit only means something while single reels may open at all.
                 AnimatedVisibility(visible = optionChecked) {
@@ -325,6 +340,31 @@ private fun OptionRow(option: Feature, checked: Boolean, enabled: Boolean, onChe
             Text(stringResource(option.text), style = MaterialTheme.typography.bodyLarge)
         }
         Switch(checked = checked, onCheckedChange = null, enabled = enabled)
+    }
+}
+
+/** How much of Instagram's Home opens instead of going to Messages. */
+@Composable
+private fun HomeControl(home: InstagramHome, enabled: Boolean, onHomeChange: (InstagramHome) -> Unit) {
+    Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp)) {
+        Row(Modifier.alpha(if (enabled) 1f else DISABLED_ALPHA), verticalAlignment = Alignment.CenterVertically) {
+            val tint = if (home != InstagramHome.OFF) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+            FeatureIcon(R.drawable.ic_home, tint)
+            Text(stringResource(R.string.instagram_home), style = MaterialTheme.typography.bodyLarge)
+        }
+        Spacer(Modifier.height(8.dp))
+        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+            HOME_CHOICES.forEachIndexed { i, (choice, label) ->
+                SegmentedButton(
+                    selected = home == choice,
+                    onClick = { onHomeChange(choice) },
+                    shape = SegmentedButtonDefaults.itemShape(i, HOME_CHOICES.size),
+                    enabled = enabled,
+                ) {
+                    Text(stringResource(label))
+                }
+            }
+        }
     }
 }
 
@@ -392,6 +432,12 @@ private fun rememberAppIcon(pkg: String, size: Dp): ImageBitmap? {
 
 /** Material's opacity for disabled content. */
 private const val DISABLED_ALPHA = 0.38f
+
+private val HOME_CHOICES = listOf(
+    InstagramHome.OFF to R.string.instagram_home_off,
+    InstagramHome.STORIES to R.string.instagram_home_stories,
+    InstagramHome.FEED to R.string.instagram_home_feed,
+)
 
 /** The daily limits the slider steps through. Zero is no scrolling at all. */
 private val LIMITS = listOf(0, 10, 20, 30, 50, 75, 100, 150, 200, 300)

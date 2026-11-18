@@ -129,9 +129,11 @@ class GuardService : AccessibilityService() {
         val snapshot = Snapshot.read(root)
         val view = InstagramView(snapshot.nodes, width, height)
         val seen = view.screen()
+        val home = prefs.instagramHome
         guard.reelsAllowed = prefs.instagramReels
         guard.scrollsLeft = scrollsLeft(Instagram.PACKAGE)
-        val action = guard.onScreen(seen, now())
+        guard.homeOpen = home != InstagramHome.OFF
+        val action = guard.onScreen(seen, now(), view.isChatReel())
         when (action) {
             Action.LookAgain -> scheduleEvaluation(LOOK_AGAIN_MS)
             Action.OpenMessages -> {
@@ -139,10 +141,10 @@ class GuardService : AccessibilityService() {
                 scheduleEvaluation(Guard.REDIRECT_GAP_MS + LOOK_AGAIN_MS)
             }
             Action.LeaveInstagram -> performGlobalAction(GLOBAL_ACTION_HOME)
-            Action.CloseReel -> closeReel(R.string.toast_reels_off)
+            Action.CloseReel -> closeReel(if (guard.reelsAllowed) R.string.toast_chat_reels_only else R.string.toast_reels_off)
             else -> Unit
         }
-        overlays.show(instagramCovers(view, seen))
+        overlays.show(instagramCovers(view, seen, home))
     }
 
     private fun guardYouTube(root: AccessibilityNodeInfo) {
@@ -152,6 +154,7 @@ class GuardService : AccessibilityService() {
         val now = now()
         guard.reelsAllowed = prefs.youtubeShorts
         guard.scrollsLeft = scrollsLeft(YouTube.PACKAGE)
+        guard.homeOpen = false
         val action = guard.onScreen(seen, now)
         when (action) {
             Action.LookAgain -> scheduleEvaluation(LOOK_AGAIN_MS)
@@ -180,15 +183,24 @@ class GuardService : AccessibilityService() {
         performGlobalAction(GLOBAL_ACTION_BACK)
     }
 
-    private fun instagramCovers(view: InstagramView, seen: Screen): List<Cover> = buildList {
-        view.feedTabs(reelsTabOpen = guard.scrollsLeft > 0).forEach { add(Cover(it.id, it.box)) }
+    private fun instagramCovers(view: InstagramView, seen: Screen, home: InstagramHome): List<Cover> = buildList {
+        view.feedTabs(reelsTabOpen = guard.scrollsLeft > 0, homeOpen = guard.homeOpen).forEach { add(Cover(it.id, it.box)) }
         // Only cover a feed once two looks agree, so a passing frame never gets a panel.
         if (seen != guard.screen) return@buildList
         when {
             seen == Screen.EXPLORE -> add(Cover(FEED_COVER, view.feedArea(), getString(R.string.cover_explore)))
+            seen == Screen.HOME && home == InstagramHome.STORIES -> add(storiesOnlyCover(view))
             seen == Screen.HOME && guard.redirectFailed ->
                 add(Cover(FEED_COVER, view.feedArea(), getString(R.string.cover_home)))
         }
+    }
+
+    // The cover swallows swipes, so once the stories scroll away only the Home button brings them back.
+    private fun storiesOnlyCover(view: InstagramView): Cover {
+        val feed = view.feedArea()
+        val storiesBottom = view.storiesBottom()
+            ?: return Cover(FEED_COVER, feed, getString(R.string.cover_stories_gone))
+        return Cover(FEED_COVER, feed.copy(top = maxOf(feed.top, storiesBottom)), getString(R.string.cover_home))
     }
 
     private fun onScroll(pager: AccessibilityNodeInfo, index: Int) {
@@ -245,6 +257,7 @@ class GuardService : AccessibilityService() {
     private fun onTap(node: AccessibilityNodeInfo) {
         val id = node.viewIdResourceName?.substringAfter(":id/")
         if (id != Instagram.HOME_TAB && id != Instagram.REELS_TAB) return
+        if (id == Instagram.HOME_TAB && prefs.instagramHome != InstagramHome.OFF) return
         if (id == Instagram.REELS_TAB && scrollsLeft(Instagram.PACKAGE) > 0) return
         val messagesTab = activeRoot()
             ?.findAccessibilityNodeInfosByViewId("${Instagram.PACKAGE}:id/${Instagram.MESSAGES_TAB}")

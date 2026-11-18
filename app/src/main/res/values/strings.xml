@@ -18,6 +18,13 @@
     <string name="instagram_allowed">Open reels from chats</string>
     <string name="instagram_blocked">No feed, no scrolling</string>
     <string name="instagram_blocked_with_limit">No feed</string>
+    <string name="instagram_home">Home</string>
+    <string name="instagram_home_off">Off</string>
+    <string name="instagram_home_stories">Stories</string>
+    <string name="instagram_home_feed">Feed</string>
+    <string name="instagram_blocked_home">No Explore, no reels outside chats</string>
+    <string name="instagram_blocked_home_no_reels">No Explore, no reels</string>
+    <string name="instagram_blocked_home_with_limit">No Explore, reels stop at the limit</string>
     <string name="youtube">YouTube</string>
     <string name="youtube_allowed">Open shorts from Home</string>
     <string name="youtube_blocked">No Shorts tab, no scrolling</string>
@@ -29,10 +36,12 @@
     <string name="not_installed">Not installed</string>
 
     <string name="cover_home">The feed is off.</string>
+    <string name="cover_stories_gone">The feed is off. Tap Home to get back to the stories.</string>
     <string name="cover_explore">Explore is off. Search still works.</string>
     <string name="toast_one_reel">Just this reel. Scrolling is off.</string>
     <string name="toast_one_short">Just this short. Scrolling is off.</string>
     <string name="toast_reels_off">Reels are off.</string>
+    <string name="toast_chat_reels_only">Only reels from chats.</string>
     <string name="counter">%1$d/%2$d</string>
     <string name="counter_done">%1$d/%2$d · Done for today</string>
     <string name="toast_shorts_off">Shorts are off.</string>

@@ -19,8 +19,12 @@ object Instagram {
     /** The Instagram wordmark in Home's top bar. Instagram 455 no longer marks the Home tab selected. */
     const val HOME_LOGO = "title_logo"
 
+    /** One story in the row at the top of Home, around its avatar and name. */
+    const val STORY = "outer_container"
+    const val STORY_AVATAR = "avatar_image_view"
+
     /** Bars above a feed that stay uncovered: Home's top bar and Explore's search bar. */
-    val TOP_BARS = setOf("action_bar_container", "action_bar_search_edit_text", INBOX_BUTTON, HOME_LOGO)
+    val TOP_BARS = setOf("action_bar_container", "action_bar_left_button", "action_bar_search_edit_text", INBOX_BUTTON, HOME_LOGO)
 
     fun isReelPager(id: String): Boolean = id.startsWith("clips_view")
 }
@@ -36,7 +40,7 @@ class InstagramView(
         val reelsTab = isTabSelected(Instagram.REELS_TAB)
         if (hasReelViewer()) {
             // A reel opened from a chat has a reply bar. The Reels tab never does.
-            return if (reelsTab && nodes.none { it.id.startsWith("reply_bar") }) Screen.REELS_TAB else Screen.REEL
+            return if (reelsTab && !isChatReel()) Screen.REELS_TAB else Screen.REEL
         }
         if (reelsTab) return Screen.REELS_TAB
         if (isTabSelected(Instagram.MESSAGES_TAB) || hasInbox()) return Screen.MESSAGES
@@ -47,14 +51,17 @@ class InstagramView(
         return Screen.OTHER
     }
 
+    /** A reel opened from a chat has a reply bar under it. */
+    fun isChatReel(): Boolean = nodes.any { it.id.startsWith("reply_bar") }
+
     /**
-     * Bottom bar buttons that lead to a feed. Home stays tappable when Messages has no button of its
-     * own, because Home is then the only way back to the inbox. Reels stays tappable while
-     * [reelsTabOpen], when the day's scroll limit has reels left.
+     * Bottom bar buttons that lead to a feed. Home stays tappable while [homeOpen], or when Messages
+     * has no button of its own, because Home is then the only way back to the inbox. Reels stays
+     * tappable while [reelsTabOpen], when the day's scroll limit has reels left.
      */
-    fun feedTabs(reelsTabOpen: Boolean = false): List<ViewNode> {
+    fun feedTabs(reelsTabOpen: Boolean = false, homeOpen: Boolean = false): List<ViewNode> {
         val ids = buildList {
-            if (tab(Instagram.MESSAGES_TAB) != null) add(Instagram.HOME_TAB)
+            if (!homeOpen && tab(Instagram.MESSAGES_TAB) != null) add(Instagram.HOME_TAB)
             if (!reelsTabOpen) add(Instagram.REELS_TAB)
         }
         return ids.mapNotNull(::tab)
@@ -69,6 +76,19 @@ class InstagramView(
             ?: 0
         val bottom = bottomBarTabs().minOfOrNull { it.box.top } ?: screenHeight
         return Box(0, top, screenWidth, bottom)
+    }
+
+    /**
+     * Where the row of stories ends on Home, or null once it has scrolled away. The row itself is
+     * left out of the accessibility tree, so its stories stand in for it.
+     */
+    fun storiesBottom(): Int? {
+        val avatars = nodes.filter { it.id == Instagram.STORY_AVATAR }
+        return nodes
+            .filter { story ->
+                story.id == Instagram.STORY && story.box.top <= screenHeight * 0.3 && avatars.any { it.box in story.box }
+            }
+            .maxOfOrNull { it.box.bottom }
     }
 
     private fun bottomBarTabs() = nodes.filter { it.id.endsWith("_tab") && it.box.top > screenHeight * 0.75 }

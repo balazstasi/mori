@@ -5,6 +5,9 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import java.time.LocalDate
 
+/** How much of Instagram's Home opens: none of it, only the stories at the top, or the whole feed. */
+enum class InstagramHome { OFF, STORIES, FEED }
+
 class Prefs(context: Context) {
 
     private val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
@@ -27,6 +30,10 @@ class Prefs(context: Context) {
     var instagramReels: Boolean
         get() = prefs.getBoolean(KEY_INSTAGRAM_REELS, true)
         set(value) = prefs.edit { putBoolean(KEY_INSTAGRAM_REELS, value) }
+
+    var instagramHome: InstagramHome
+        get() = InstagramHome.entries.firstOrNull { it.name == prefs.getString(KEY_INSTAGRAM_HOME, null) } ?: InstagramHome.OFF
+        set(value) = prefs.edit { putString(KEY_INSTAGRAM_HOME, value.name) }
 
     /** Whether a short opened from Home, search or a link may play, one at a time. */
     var youtubeShorts: Boolean
@@ -84,6 +91,7 @@ class Prefs(context: Context) {
         const val KEY_INSTAGRAM = "instagram"
         const val KEY_YOUTUBE = "youtube"
         const val KEY_INSTAGRAM_REELS = "instagram_reels"
+        const val KEY_INSTAGRAM_HOME = "instagram_home"
         const val KEY_YOUTUBE_SHORTS = "youtube_shorts"
     }
 }

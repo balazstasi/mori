@@ -122,6 +122,12 @@ class InstagramViewTest {
     }
 
     @Test
+    fun leavesHomeTappableWhileHomeIsOpen() {
+        val view = InstagramView(tabs("direct_tab"), width, height)
+        assertEquals(listOf("clips_tab"), view.feedTabs(homeOpen = true).map { it.id })
+    }
+
+    @Test
     fun keepsHomeTappableWhenItIsTheWayToMessages() {
         val oldTabs = tabs("feed_tab").filterNot { it.id == "direct_tab" }
         val view = InstagramView(oldTabs, width, height)
@@ -133,6 +139,33 @@ class InstagramViewTest {
         val searchBar = ViewNode("action_bar_search_edit_text", Box(40, 120, 1040, 250))
         val view = InstagramView(tabs("search_tab") + searchBar, width, height)
         assertEquals(Box(0, 250, width, 2250), view.feedArea())
+    }
+
+    @Test
+    fun storiesEndWhereTheirRowEnds() {
+        val topBar = ViewNode("action_bar_left_button", Box(0, 97, 124, 243))
+        val stories = listOf(
+            ViewNode("outer_container", Box(0, 242, 292, 614)),
+            ViewNode("avatar_image_view", Box(35, 308, 256, 529)),
+        )
+        val view = InstagramView(tabs("feed_tab") + topBar + stories, width, height)
+        assertEquals(614, view.storiesBottom())
+        assertEquals(Box(0, 243, width, 2250), view.feedArea())
+    }
+
+    @Test
+    fun storiesScrolledAwayAreGone() {
+        // Posts lower down use the same container name, but no story avatar sits inside them.
+        val post = ViewNode("outer_container", Box(0, 300, width, 900))
+        val view = InstagramView(tabs("feed_tab") + post, width, height)
+        assertEquals(null, view.storiesBottom())
+    }
+
+    @Test
+    fun aReelWithAReplyBarIsFromAChat() {
+        val replyBar = ViewNode("reply_bar_container_scroll_view", Box(0, 2100, width, 2200))
+        assertEquals(true, InstagramView(listOf(fullScreen("clips_viewer_view_pager"), replyBar), width, height).isChatReel())
+        assertEquals(false, InstagramView(listOf(fullScreen("clips_viewer_view_pager")), width, height).isChatReel())
     }
 
     @Test

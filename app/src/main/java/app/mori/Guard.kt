@@ -41,6 +41,12 @@ class Guard {
     /** How many more reels or shorts the user may scroll on to today. The service sets it from the daily limit. */
     var scrollsLeft = 0
 
+    /**
+     * Whether Instagram's Home stays open instead of going to Messages. Its feed is full of reels, so
+     * while it is open only reels from chats play, unless the day's limit has some left.
+     */
+    var homeOpen = false
+
     private var candidate: Screen? = null
     private var sawMessages = false
     private var lastTapAt = NEVER
@@ -70,7 +76,8 @@ class Guard {
         lastTapAt = now
     }
 
-    fun onScreen(seen: Screen, now: Long): Action {
+    /** [fromChat] says the reel on screen was opened from a chat. */
+    fun onScreen(seen: Screen, now: Long, fromChat: Boolean = false): Action {
         if (seen.isReel && reelSince == NEVER) reelSince = now
         if (seen != screen) {
             // Screens flicker while they change, so a new screen counts once two looks in a row agree.
@@ -90,10 +97,10 @@ class Guard {
                 redirectFailed = false
                 Action.None
             }
-            Screen.HOME -> onHome(now)
+            Screen.HOME -> if (homeOpen) Action.None else onHome(now)
             // The Reels tab is a feed of reels, so it is open only while the day's limit has some left.
             Screen.REELS_TAB -> if (scrollsLeft > 0) Action.None else openMessages(now)
-            Screen.REEL -> if (reelsAllowed || !backOutOfReel()) Action.None else Action.CloseReel
+            Screen.REEL -> if (reelMayPlay(fromChat) || !backOutOfReel()) Action.None else Action.CloseReel
             else -> Action.None
         }
     }
@@ -150,6 +157,8 @@ class Guard {
         backedOutOfReel = true
         return true
     }
+
+    private fun reelMayPlay(fromChat: Boolean) = reelsAllowed && (fromChat || !homeOpen || scrollsLeft > 0)
 
     // Messages acts as Instagram's first screen, so going back from it onto Home leaves Instagram.
     // A tap shortly before means the user pressed Home, which only happens when Home is the way to Messages.
