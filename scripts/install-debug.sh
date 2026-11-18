@@ -12,7 +12,9 @@ if [ $# -gt 0 ]; then
 fi
 SERVICE=app.mori.debug/app.mori.GuardService
 
-./gradlew -q installDebug
+# Install for the current user only. A plain install also lands in work and dual app profiles.
+./gradlew -q assembleDebug
+"${ADB[@]}" install -r --user current app/build/outputs/apk/debug/app-debug.apk
 
 for attempt in 1 2 3; do
   # Keep any accessibility services that are already on, such as a password manager.
