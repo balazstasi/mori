@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0 (2026-11-18)
+
+### Changed
+
+- The app ID is now `io.github.balazstasi.mori`. The old ID, `app.mori`, looked like the domain `mori.app`, which belongs to someone else, and F-Droid rejects app IDs that match another owner's domain. Android treats the new ID as a different app, so uninstall Mori 0.2.1 or older before installing this one, then turn Mori on in Accessibility again. Settings start over.
+
 ## 0.2.1 (2026-11-18)
 
 ### Changed

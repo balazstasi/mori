@@ -12,11 +12,11 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "app.mori"
+        applicationId = "io.github.balazstasi.mori"
         minSdk = 26
         targetSdk = 36
-        versionCode = 3
-        versionName = "0.2.1"
+        versionCode = 4
+        versionName = "0.3.0"
     }
 
     // Release signing reads keystore.properties, which stays out of git. Without it, release builds are unsigned.

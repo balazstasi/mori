@@ -1,0 +1,1 @@
+• New app ID: io.github.balazstasi.mori. If you installed Mori 0.2.1 or older from GitHub, uninstall it first. Settings start over.

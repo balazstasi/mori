@@ -10,7 +10,7 @@ if [ $# -gt 0 ]; then
   ADB+=(-s "$1")
   export ANDROID_SERIAL="$1"
 fi
-SERVICE=app.mori.debug/app.mori.GuardService
+SERVICE=io.github.balazstasi.mori.debug/app.mori.GuardService
 
 # Install for the current user only. A plain install also lands in work and dual app profiles.
 ./gradlew -q assembleDebug
