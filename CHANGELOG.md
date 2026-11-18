@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1 (2026-11-18)
+
+### Changed
+
+- Release builds are reproducible. The APK no longer records the git state of the checkout, so a build from any clone of a tag matches the signed release, and F-Droid can ship the same signed APK as GitHub.
+- The repository has a store listing in `fastlane/metadata` for F-Droid and IzzyOnDroid.
+
 ## 0.2.0 (2026-11-18)
 
 ### Added

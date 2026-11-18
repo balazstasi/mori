@@ -41,14 +41,14 @@ Mori was tested on a Samsung Galaxy S23 FE with Android 16, Instagram 455 and Yo
 
 ## Install
 
-1. Download `Mori-0.2.0.apk` from [Releases](https://github.com/balazstasi/mori/releases/latest) and open it. If Android asks, allow your browser or file manager to install apps.
+1. Download `Mori-0.2.1.apk` from [Releases](https://github.com/balazstasi/mori/releases/latest) and open it. If Android asks, allow your browser or file manager to install apps.
 2. Open Mori. On Android 13 and newer, tap **App info** in the setup card, open the menu in the top corner and choose **Allow restricted settings**. Android asks for this for every app installed from outside an app store.
 3. Tap **Turn on** and switch on Mori in Accessibility.
 4. Pick what each app allows with its switches and scroll limit.
 
 The setup card shows a check next to each step once it is done.
 
-To check the download, compare the signing certificate with `apksigner verify --print-certs Mori-0.2.0.apk`. Its SHA-256 digest is:
+To check the download, compare the signing certificate with `apksigner verify --print-certs Mori-0.2.1.apk`. Its SHA-256 digest is:
 
 ```
 ef5abb3ee2479e90062bc21df2f9e96852d1aa532265eeb8304cd465b435b757
