@@ -1,0 +1,27 @@
+Mori turns off the endless feeds in Instagram and YouTube and leaves the parts you came for.
+
+<b>Instagram</b>
+
+• Opens straight to your messages. The home feed, the Reels tab and the Explore grid are covered.
+• Messages and calls, search, stories and profiles keep working.
+• A reel someone sends you plays on its own, but you cannot scroll on to the next one.
+• Home can stay open if you want it: <i>Stories</i> shows only the row of stories, <i>Feed</i> opens all of Home. While Home is open, only reels from chats play.
+
+<b>YouTube</b>
+
+• Home, search, subscriptions and regular videos work as usual.
+• The Shorts button is covered, and a short you open plays on its own.
+
+<b>Your rules</b>
+
+• Each app has its own switch.
+• Single reels and shorts can be switched off, so they close as they open.
+• A daily scroll limit per app, from 10 to 300. While some are left, a small counter shows how many you used. Counts start over at midnight.
+
+<b>Privacy</b>
+
+Mori has no internet permission, so it cannot send anything anywhere. It reads the names, positions and labels of the elements on screen in Instagram and YouTube to tell screens apart, and ignores every other app. It keeps nothing except its settings and today's scroll counts.
+
+<b>Accessibility service</b>
+
+Mori uses Android's accessibility service to read which screen Instagram or YouTube shows and to cover the feeds. It is the only permission Mori asks for. On Android 13 and newer, allow restricted settings for Mori in App info before turning it on.

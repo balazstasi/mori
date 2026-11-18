@@ -1,0 +1,3 @@
+• Instagram Home setting: Off, Stories or Feed. Stories opens Home with only its row of stories, Feed opens all of Home.
+• While Home is open, only reels from chats play, unless the daily scroll limit has reels left.
+• The cover over Home's feed starts below the top bar.
