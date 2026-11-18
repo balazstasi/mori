@@ -15,8 +15,8 @@ android {
         applicationId = "app.mori"
         minSdk = 26
         targetSdk = 36
-        versionCode = 2
-        versionName = "0.2.0"
+        versionCode = 3
+        versionName = "0.2.1"
     }
 
     // Release signing reads keystore.properties, which stays out of git. Without it, release builds are unsigned.
@@ -42,6 +42,8 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
             signingConfig = signingConfigs.findByName("release")
+            // The git state of the checkout would end up in the APK, so builds from other clones would differ.
+            vcsInfo.include = false
         }
     }
 
